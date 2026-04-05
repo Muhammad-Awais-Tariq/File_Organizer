@@ -23,13 +23,28 @@ def folder_maker(file , source , destination , name):
 def file_organizer(source):
     destination = make_folder(source)
     files = os.listdir(source)
-    images_ext = (".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".svg", ".tiff")
-    video_ext = (".mp4", ".mkv", ".mov", ".avi", ".wmv", ".flv", ".webm")
+    extension = {
+        "Images" : (".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".svg", ".tiff"),
+        "Videos" : (".mp4", ".mkv", ".mov", ".avi", ".wmv", ".flv", ".webm"),
+        "Documents" : (".pdf", ".doc", ".docx", ".txt", ".rtf", ".odt", ".md"),
+        "Spreadsheets" : (".xls", ".xlsx", ".csv", ".ods"),
+        "Presentations" : (".ppt", ".pptx", ".odp"),
+        "Audio" : (".mp3", ".wav", ".aac", ".flac", ".m4a", ".ogg"),
+        "Archives" : (".zip", ".rar", ".7z", ".tar", ".gz"),
+        "Source Code" : (".py", ".cpp", ".c", ".java", ".js", ".ts", ".html", ".css", ".php", ".rb", ".go"),
+        "Configurations" : (".json", ".xml", ".yaml", ".yml", ".ini", ".cfg", ".env", ".toml"),
+        "Ebooks" : (".epub", ".mobi", ".azw", ".djvu"),
+        "Fonts" : (".ttf", ".otf", ".woff", ".woff2"),
+        "Installers" : (".exe", ".msi", ".apk", ".dmg", ".deb", ".rpm"),
+        "Disk Images" : (".iso", ".img"),
+        "Design Files" : (".psd", ".ai", ".xd", ".fig"),
+        "Logs" : (".log"),
+    }
     for file in files:
-        if file.endswith(tuple(images_ext)):
-            folder_maker(file , source , destination , "Image")
-        if file.endswith(tuple(video_ext)):
-            folder_maker(file , source , destination , "Video")  
+        for k , v in extension.items():
+            if file.endswith(tuple(v)):
+                folder_maker(file , source , destination , k)
+                break
 def main():
     while True:
         source = input("Enter the path of your messey folder: ")
@@ -44,20 +59,7 @@ def main():
 if __name__ == "__main__":
     main()
 
-#to be done in the future
-# documents → [".pdf", ".doc", ".docx", ".txt", ".rtf", ".odt", ".md"]
-# spreadsheets → [".xls", ".xlsx", ".csv", ".ods"]
-# presentations → [".ppt", ".pptx", ".odp"]
-# audio → [".mp3", ".wav", ".aac", ".flac", ".m4a", ".ogg"]
-# archives → [".zip", ".rar", ".7z", ".tar", ".gz"]
-# code → [".py", ".cpp", ".c", ".java", ".js", ".ts", ".html", ".css", ".php", ".rb", ".go"]
-# config → [".json", ".xml", ".yaml", ".yml", ".ini", ".cfg", ".env", ".toml"]
-# ebooks → [".epub", ".mobi", ".azw", ".djvu"]
-# fonts → [".ttf", ".otf", ".woff", ".woff2"]
-# installers → [".exe", ".msi", ".apk", ".dmg", ".deb", ".rpm"]
-# disk_images → [".iso", ".img"]
-# design_files → [".psd", ".ai", ".xd", ".fig"]
-# logs → [".log"]
+
 #make a dictionary of all the values where key is the type and the value is tuple of the extensions
 # Files with no extension
 # Hidden files like dotfiles
