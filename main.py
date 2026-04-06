@@ -27,8 +27,14 @@ def delete(files,source):
         for file in files:
             file_name = file.split(".")[0]
             if "- Copy" in file_name:
-                print(f"Delting file : {file}")
-                os.remove(os.path.join(source,file))
+                while True:
+                    choice = input(f"Following file : {file} is detected as duplicate do you wish delete it (Y/N) : ").lower()
+                    if choice in ["y" , "n"]:
+                        break                
+                if choice == "y":        
+                    os.remove(os.path.join(source,file))
+                else:
+                    allfiles.add(file)   
             else:
                 allfiles.add(file)
         
