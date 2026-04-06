@@ -20,9 +20,31 @@ def folder_maker(file , source , destination , name):
         os.mkdir(sub_folder)
         folder_maker(file , source , destination , name)
 
+
+def delete(files,source):
+    try: 
+        allfiles = set()
+        for file in files:
+            file_name = file.split(".")[0]
+            if "- Copy" in file_name:
+                print(f"Delting file : {file}")
+                os.remove(os.path.join(source,file))
+            else:
+                allfiles.add(file)
+        
+        return allfiles
+    except FileNotFoundError:
+        pass
+
+def cleanfiles(files,source):
+    delete_files = delete(files,source)
+    return delete_files
+
+        
 def file_organizer(source):
     destination = make_folder(source)
-    files = os.listdir(source)
+    raw_files = os.listdir(source)
+    files = cleanfiles(raw_files,source)
     extension = {
         "Images" : (".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp", ".svg", ".tiff"),
         "Videos" : (".mp4", ".mkv", ".mov", ".avi", ".wmv", ".flv", ".webm"),
@@ -63,7 +85,6 @@ if __name__ == "__main__":
 #make a dictionary of all the values where key is the type and the value is tuple of the extensions
 # Files with no extension
 # Hidden files like dotfiles
-# Duplicate files
 # Very small temp files
 # Incomplete downloads
 # Mixed folders where one folder contains many different types
