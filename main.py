@@ -6,7 +6,7 @@ def make_folder(source):
         destination = os.path.join(source, Folder_name)
         try:
             os.mkdir(destination)
-            return destination
+            return Folder_name , destination
         except:
             print("The folder already exists with this name select a different name")
 
@@ -25,7 +25,7 @@ def delete(files,source):
     try: 
         allfiles = set()
         for file in files:
-            file_name = file.split(".")[0]
+            file_name = file.rsplit(".",1)[0]
             if "- Copy" in file_name:
                 while True:
                     choice = input(f"Following file : {file} is detected as duplicate do you wish delete it (Y/N) : ").lower()
@@ -48,7 +48,7 @@ def cleanfiles(files,source):
 
         
 def file_organizer(source):
-    destination = make_folder(source)
+    foldername , destination = make_folder(source)
     raw_files = os.listdir(source)
     files = cleanfiles(raw_files,source)
     extension = {
@@ -68,11 +68,17 @@ def file_organizer(source):
         "Design Files" : (".psd", ".ai", ".xd", ".fig"),
         "Logs" : (".log"),
     }
+
     for file in files:
-        for k , v in extension.items():
-            if file.endswith(tuple(v)):
-                folder_maker(file , source , destination , k)
-                break
+        if os.path.isfile(os.path.join(source , file)):
+            for k , v in extension.items():
+                if file.endswith(tuple(v)):
+                    folder_maker(file , source , destination , k)
+                    break
+        elif file != foldername and os.path.isdir(os.path.join(source , file)):
+            folder_maker(file , source , destination , "Folders")
+        else:
+            folder_maker(file , source , destination , "Miscellaneous")
 def main():
     while True:
         source = input("Enter the path of your messey folder: ")
@@ -86,13 +92,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-#make a dictionary of all the values where key is the type and the value is tuple of the extensions
-# Files with no extension
-# Hidden files like dotfiles
-# Very small temp files
-# Incomplete downloads
-# Mixed folders where one folder contains many different types
-# Unknown file types that do not match any rule
-# Nested folders so files are not only sorted in the top level
