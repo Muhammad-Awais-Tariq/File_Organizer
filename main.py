@@ -2,11 +2,11 @@ import os
 
 def make_folder(source):
     while True:
-        Folder_name = input("Enter the name of the folder that you want your organized file in : ")
-        destination = os.path.join(source, Folder_name)
+        organized_folder_name = input("Enter the name of the folder that you want your organized file in : ")
+        organized_folder_destination = os.path.join(source, organized_folder_name)
         try:
-            os.mkdir(destination)
-            return Folder_name , destination
+            os.mkdir(organized_folder_destination)
+            return organized_folder_name , organized_folder_destination
         except:
             print("The folder already exists with this name select a different name")
 
@@ -15,6 +15,7 @@ def folder_maker(file , source , destination , name):
     if os.path.exists(sub_folder):
         orginal_path = os.path.join(source , file)
         filename = os.path.basename(orginal_path)
+        print(f"Moving files into {name} ")
         os.replace(orginal_path , os.path.join(sub_folder , filename))
     else:
         os.mkdir(sub_folder)
@@ -59,7 +60,7 @@ def file_organizer(source):
         "Presentations" : (".ppt", ".pptx", ".odp"),
         "Audio" : (".mp3", ".wav", ".aac", ".flac", ".m4a", ".ogg"),
         "Archives" : (".zip", ".rar", ".7z", ".tar", ".gz"),
-        "Source Code" : (".py", ".cpp", ".c", ".java", ".js", ".ts", ".html", ".css", ".php", ".rb", ".go"),
+        "Source Code" : (".py", ".cpp", ".c", ".java", ".js", ".ts", ".html", ".css", ".php", ".rb", ".go" , ".sql"),
         "Configurations" : (".json", ".xml", ".yaml", ".yml", ".ini", ".cfg", ".env", ".toml"),
         "Ebooks" : (".epub", ".mobi", ".azw", ".djvu"),
         "Fonts" : (".ttf", ".otf", ".woff", ".woff2"),
@@ -70,21 +71,24 @@ def file_organizer(source):
     }
 
     for file in files:
-        if os.path.isfile(os.path.join(source , file)):
+        current_path = os.path.join(source, file)
+        if current_path == destination:
+            continue
+        elif os.path.isdir(current_path):
+            folder_maker(file , source , destination , "Folders")
+        elif os.path.isfile(current_path):
             for k , v in extension.items():
-                if file.endswith(tuple(v)):
+                if file.lower().endswith(tuple(v)):
                     folder_maker(file , source , destination , k)
                     break
-        elif file != foldername and os.path.isdir(os.path.join(source , file)):
-            folder_maker(file , source , destination , "Folders")
-        else:
-            folder_maker(file , source , destination , "Miscellaneous")
+            else:
+                folder_maker(file , source , destination , "Miscellaneous")
 def main():
     while True:
-        source = input("Enter the path of your messey folder: ")
+        Unorganized_folder = input("Enter the path of your messey folder: ")
 
-        if os.path.isdir(source):
-            file_organizer(source)
+        if os.path.isdir(Unorganized_folder):
+            file_organizer(Unorganized_folder)
             break
         else:
             print("Enther a valid path")
